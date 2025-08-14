@@ -165,12 +165,13 @@ export async function POST(request: NextRequest) {
           console.log('[generate-ai-code-stream] Has fileCache:', !!global.sandboxState?.fileCache);
           console.log('[generate-ai-code-stream] Has manifest:', !!global.sandboxState?.fileCache?.manifest);
           
-          const manifest: FileManifest | undefined = global.sandboxState?.fileCache?.manifest;
-          
-          if (manifest) {
+          const fileCache = global.sandboxState?.fileCache;
+          const manifest: FileManifest | undefined = fileCache?.manifest;
+
+          if (fileCache && manifest) {
             await sendProgress({ type: 'status', message: '🔍 Creating search plan...' });
-            
-            const fileContents = global.sandboxState.fileCache.files;
+
+            const fileContents = fileCache.files;
             console.log('[generate-ai-code-stream] Files available for search:', Object.keys(fileContents).length);
             
             // STEP 1: Get search plan from AI
@@ -220,9 +221,7 @@ export async function POST(request: NextRequest) {
                     console.log('[generate-ai-code-stream] Target selected:', target);
                     
                     // Create surgical edit context with exact location
-                    const normalizedPath = target.filePath.replace('/home/user/app/', '');
-                    const fileContent = fileContents[normalizedPath]?.content || '';
-                    
+
                     // Build enhanced context with search results
                     enhancedSystemPrompt = `
 ${formatSearchResultsForAI(searchExecution.results)}
