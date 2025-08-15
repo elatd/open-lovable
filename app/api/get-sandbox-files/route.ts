@@ -126,8 +126,9 @@ print(json.dumps(result))
     fileManifest.routes = extractRoutes(fileManifest.files);
     
     // Update global file cache with manifest
-    if (global.sandboxState?.fileCache) {
-      global.sandboxState.fileCache.manifest = fileManifest;
+    const cache = global.sandboxState?.fileCache;
+    if (cache) {
+      cache.manifest = fileManifest;
     }
 
     return NextResponse.json({
