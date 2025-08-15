@@ -345,7 +345,7 @@ export async function POST(request: NextRequest) {
           
           // Update file cache
           if (global.sandboxState?.fileCache) {
-            global.sandboxState.fileCache.files[normalizedPath] = {
+            global.sandboxState.fileCache!.files[normalizedPath] = {
               content: fileContent,
               lastModified: Date.now()
             };
@@ -491,7 +491,7 @@ with open(file_path, 'w') as f:
 print(f"Auto-generated: {file_path}")
           `);
           results.filesCreated.push('src/index.css (with Tailwind)');
-        } catch (error) {
+        } catch {
           results.errors.push('Failed to create index.css with Tailwind');
         }
       }
