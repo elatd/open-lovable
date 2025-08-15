@@ -463,7 +463,7 @@ export async function POST(request: NextRequest) {
                       if (data.type === 'success' && data.installedPackages) {
                         results.packagesInstalled = data.installedPackages;
                       }
-                    } catch (e) {
+                    } catch {
                       // Ignore parse errors
                     }
                   }
@@ -550,7 +550,7 @@ print(f"File written: ${fullPath}")
             
             // Update file cache
             if (global.sandboxState?.fileCache) {
-              global.sandboxState.fileCache.files[normalizedPath] = {
+              global.sandboxState.fileCache!.files[normalizedPath] = {
                 content: fileContent,
                 lastModified: Date.now()
               };
